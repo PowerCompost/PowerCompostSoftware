@@ -1,0 +1,6 @@
+*.aux
+*.log
+*.mtc*
+*.out
+*.gz
+*.toc

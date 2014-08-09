@@ -1,0 +1,211 @@
+%%===================================================================
+%%  PowerCompostPythonScripts - Documentation
+%%  Florentin Delaine
+%%  florentin.delaine@ens-cachan.fr
+%% ==================================================================
+\documentclass{MyReportClass}
+%	\RequirePackage{pslatex}
+	\RequirePackage[utf8]{inputenc}  
+	\RequirePackage[T1]{fontenc}
+	\usepackage{float} 
+	\usepackage{placeins} 
+	\usepackage[update,prepend]{epstopdf} % permet de ne convertir qu'une fois les eps en pdf (gain de temps compil)
+\hypersetup{%
+	pdftitle    = {PowerCompostPythonScripts},
+	pdfsubject  = {Documentation des scripts python},
+	pdfauthor   = {Florentin Delaine},
+	pdfkeywords = {PowerCompost, python, MySQL},
+}
+
+\usepackage{listings}
+\lstset{language=TeX,basicstyle=\ttfamily,numbers=left,breaklines=true}
+
+%% ==================================================================
+
+% Titre de bas de page
+\foottitle{PowerCompost\\Documentation des scripts python}
+
+% Où trouver les figures
+%\graphicspath{{figures/}}
+
+% Style de biblio
+%\bibliographystyle{apalike-fr}
+
+% -------------------------------------------------------------------
+
+\begin{document}
+
+% -------------------------------------------------------------------
+
+\begingroup
+
+\setlength{\parindent}{0pt}
+\thispagestyle{empty}
+
+\begin{flushright}
+	Version 1.0\\
+	\today
+\end{flushright}
+
+{\Large \bf PowerCompost}
+
+\vspace{0.2in}
+\hrule
+
+\vspace{0.2in}
+{\Large \bf Documentation des scripts python} \\
+\vspace{0.5in}
+
+\begin{tabular}{ll}
+	Auteur(s):   & Florentin Delaine\\
+	Status:      & À jour\\
+\end{tabular}
+
+\vspace{0.2in}
+\hrule
+\vspace{0.5in}
+
+\endgroup
+
+% -------------------------------------------------------------------
+
+\begin{center}
+{\bf Résumé}
+\end{center}
+
+L'objectif de ce document est de fournir toutes les informations nécessaires afin de pouvoir utiliser les scripts et éventuellement les adapter à ses besoins. Comme il le sera précisé, certaines fonctionnalités ne sont pas optimisées, peuvent présenter des risques, etc, il convient donc de savoir un minimum ce que l'on fait.
+
+% -------------------------------------------------------------------
+
+\clearpage
+
+\tableofcontents
+
+\clearpage
+
+% -------------------------------------------------------------------
+
+\section{Ce qui est nécessaire}
+\begin{itemize}
+\item Un système de gestion de base de données si vous souhaitez travailler en local, ici MySQL. Installation \href{http://fr.openclassrooms.com/informatique/cours/administrez-vos-bases-de-donnees-avec-mysql}{ici} ou de préférence avec Homebrew pour les Mac users.
+\item Python 3 et les packages sp et pymysql. sp est fourni avec le code, il faut par contre installer pymysql. Google peut vous aider.
+\end{itemize}
+
+\vspace{1em}
+
+\emph{Remarque:} si vous n'avez pas envie de toucher au shell, l'installation de PyCharm CE est une solution. C'est un IDE que je trouve bien fichu pour Python. Dans les préférences, il permet d'installer les packages que l'on veut pour n'importe quelle version de Python (moyennant l'installation de quelques packages comme pip mais ça vous sera précisé).
+
+Il va de soi que pour les sections suivantes, votre serveur MySQL doit être actif...
+
+\section{informationsBDD.py}
+Ce script permet de préciser les informations de connexion à la base de données : l'adresse du serveur, vos identifiants et la base de données sur laquelle agir. Attention à ne pas envoyer ce fichier sur git.
+
+Les scripts d'import vous demandent une confirmation de ces informations avant d'agir pour éviter de foutre le bazar et votre mot de passe. Si vous mettez le bazar, vous pouvez aller chercher le goudron et les plumes.
+
+\section{scriptDecoupe.py}
+
+Ce fichier fournit un fonction pour découper un fichier en plusieurs petits. Pour modifier la taille des fichiers de sortie, regardez du côté des paramètres de la boucle dans \verb?decoupe()?. Ces fichiers sont placés dans un dossier à l'intérieur du dossier \verb?Decoupe?, il est donc important de conserver ce dossier.
+
+Une fonction est également fourni pour supprimer tous ces petits fichiers une fois qu'ils ne servent plus.
+
+\section{scriptExtractionDonneesOld.py}
+
+Script pour l'import de données datant de l'époque où LabView était utilisé pour l'acquisition.
+
+\subsection{Fichiers sources}
+Les fichiers doivent porter l'extension \verb?.txt? et ne pas comporter d'espaces dans leur nom (ni d'autres caractères exotiques).
+
+Si le fichier comporte un en-tête du type :
+\begin{lstlisting}
+LabVIEW Measurement	
+Writer_Version	2	
+Reader_Version	2	
+Separator	Tab	
+Decimal_Separator	,	
+Multi_Headings	No	
+X_Columns	One	
+Time_Pref	Absolute	
+Operator	poste2	
+Date	2013/09/10	
+Time	17:17:30,7267637252807617188	
+***End_of_Header***		
+	
+Channels	8									
+Samples	1	1	1	1	1	1	1	1		
+Date	2013/09/10	2013/09/10	2013/09/10	2013/09/10	2013/09/10	2013/09/10	2013/09/10	2013/09/10		
+Time	17:17:31,3097968101501464844	17:17:31,3097968101501464844	17:17:31,3097968101501464844	17:17:31,3097968101501464844	17:17:31,3097968101501464844	17:17:31,3097968101501464844	17:17:31,3097968101501464844	17:17:31,3097968101501464844		
+X_Dimension	Time	Time	Time	Time	Time	Time	Time	Time		
+X0	0,0000000000000000E+0	0,0000000000000000E+0	0,0000000000000000E+0	0,0000000000000000E+0	0,0000000000000000E+0	0,0000000000000000E+0	0,0000000000000000E+0	0,0000000000000000E+0		
+Delta_X	1,000000	1,000000	1,000000	1,000000	1,000000	1,000000	1,000000	1,000000		
+***End_of_Header***										
+X_Value	Untitled	Untitled 1	Untitled 2	Untitled 3	Untitled 4	Untitled 5	Untitled 6	Untitled 7	Comment	
+0,000000	21,456231	21,951068	21,556587	22,167919	21,569221	20,844871	21,732911 	2293,680716	
+
+\end{lstlisting}
+
+Remplacez le par un en-tête du type
+\begin{lstlisting}
+
+21/10/13	TC0	TC1	TC2	TC3	TC4	TC5	TC6	TC7	
+0,000000	21,456231	21,951068	21,556587	22,167919	21,569221	20,844871	21,732911	 2293,680716	
+\end{lstlisting}
+ où les valeurs sont séparées par des fabulations et le séparateur décimal, une virgule.	
+ 
+Aussi la syntaxe d'une ligne doit être de la forme suivante:
+\begin{lstlisting}
+0,000000	21,456231	21,951068	21,556587	22,167919	21,569221	20,844871	21,732911 	2293,680716	
+\end{lstlisting}
+
+\emph{Remarque:} Pour l'instant le script plante si vous n'avez pas cette forme (date + capteurs notés TCx, une valeur de temps et 8 valeurs pour les capteurs). On peut imaginer un code plus général en modifiant la grammaire du parseur.
+
+\subsection{script}
+
+Placez votre fichier dans le même répertoire que le script \verb?scriptExtractionDonneesOld.py?, lancez le et suivez les instructions. On peut aussi ne pas faire la copie mais il faudra préciser le path relatif  ou absolu comme demandé au début du script.
+
+\section{scriptExtractionDonneesNI.py}
+Placez votre fichier dans le même répertoire que le script \verb?scriptExtractionDonneesNI.py?, lancez le et suivez les instructions. On peut aussi ne pas faire la copie mais il faudra préciser le path relatif  ou absolu comme demandé au début du script.
+
+\section{scriptExportCSV.py}
+On lance \verb?scriptExportCSV.py?. On demande les tables qu'on souhaite exporter, les écarts entre les tables s'il y en a plusieurs, le pas de temps et le script fait le reste.
+
+\emph{Rq:} si la table ne commence pas à zéro et que c'est la première table, la première ligne de la table est recopiée jusqu'à ce qu'on soit à une itération dans le script qui permet de reprendre l'export normalement. On peut imaginer une solution plus esthétique, c'est ce qui a été implémenté dans l'application en C++.
+
+\section{Remarques générales}
+Ces scripts python sont lents. Cela pourrait être amélioré en utilisant la librairie \verb?numpy?. À bon entendeur.
+
+% -------------------------------------------------------------------
+
+% Section: Bibliography
+\begin{thebibliography}{5}
+\addcontentsline{toc}{section}{Références}
+\bibliography{ctpwebmonitoring}{}
+\bibliographystyle{amsplain}
+\end{thebibliography}
+% -------------------------------------------------------------------
+
+\clearpage
+
+\appendix
+
+\section{Sauvegarder une base de données MySQL}
+
+Sous Mac OS X, ouvrez Terminal et entrez les lignes suivantes en modifiant USER\_NAME, DATABASE\_NAME, FILE\_PATH et FILE\_NAME.
+\begin{lstlisting}
+mysql -u USER_NAME -p DATABASE_NAME < FILE_PATH/FILE_NAME.sql
+\end{lstlisting}
+
+Sous Linux (non testé mais ça doit être ça), ouvrez Terminal et entrez les lignes suivantes en modifiant USER\_NAME, DATABASE\_NAME, FILE\_PATH et FILE\_NAME.
+\begin{lstlisting}
+mysql -u USER_NAME -p DATABASE_NAME < FILE_PATH/FILE_NAME.sql
+\end{lstlisting}
+
+Sous Windows, ouvrez cmd.exe et entrez les lignes suivantes en modifiant USER\_NAME, DATABASE\_NAME, FILE\_PATH et FILE\_NAME. Modifiez aussi le path pour le répertoire de MySQL suivant la version que vous utilisez.
+\begin{lstlisting}
+mysql.exe -u USER_NAME -p DATABASE_NAME < FILE_PATH/FILE_NAME.sql
+\end{lstlisting}
+
+On vous demande votre mot de passe utilisateur, vous l'entrez. Tout s'importe ensuite et c'est généralement rapide.
+
+\end{document}
+
+% ------------------------------------------

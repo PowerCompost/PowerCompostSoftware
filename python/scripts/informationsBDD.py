@@ -15,8 +15,8 @@ __author__ = 'florentindelaine'
 
 # À modifier suivant le serveur MySQL auquel vous souhaitez accéder
 
-adresse = 'localhost'
+adresse = ''
 port = 8889
-utilisateur = 'root'
-motDePasse = 'root'
-baseDeDonnees = 'PowerCompost'
+utilisateur = ''
+motDePasse = ''
+baseDeDonnees = ''
