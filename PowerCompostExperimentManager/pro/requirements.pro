@@ -12,4 +12,7 @@ SUBDIRS  = PowerCompostExperimentManagerApp
 
 # Where the .pro files are
 PowerCompostExperimentManagerApp.file = PowerCompostExperimentManagerApp.pro
+#SqlWidget.file                        = SqlWidget.pro
 
+# Dependencies
+#PowerCompostExperimentManagerApp.depends = SqlWidget

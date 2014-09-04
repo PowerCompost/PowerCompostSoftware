@@ -33,10 +33,17 @@ OBJECTS_DIR  = ../tmp/o/
 
 # Where to look for included files in sources and headers
 INCLUDEPATH += ..
+#INCLUDEPATH += ../lib
 
+# Libraries
+#LIBS += -L../lib -lSqlWidget
+
+# Sources
 SOURCES     += ../app/PowerCompostExperimentManagerApp.cpp\
-               ../src/MainWindow.cpp
+               ../src/MainWindow.cpp \
+               ../src/SqlWidget.cpp
 
-HEADERS     += ../PowerCompostExperimentManager/MainWindow.h
+HEADERS     += ../PowerCompostExperimentManager/MainWindow.h \
+               ../PowerCompostExperimentManager/SqlWidget.h
 
 #-------------------------------------------------

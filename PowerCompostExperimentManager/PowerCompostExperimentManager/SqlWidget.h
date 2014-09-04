@@ -1,12 +1,11 @@
 //----------------------------------------------------------------------------
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SQLWIDGET_H
+#define SQLWIDGET_H
 
 //----------------------------------------------------------------------------
 
 // Specific header files
-#include "PowerCompostExperimentManager/SqlWidget.h"
 
 //----------------------------------------------------------------------------
 
@@ -18,26 +17,34 @@
 
 //----------------------------------------------------------------------------
 
-class MainWindow : public QMainWindow
+class SqlWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    SqlWidget(QSqlDatabase& database, QWidget *parent = 0);
+    ~SqlWidget();
 
 private:
     QSqlDatabase m_database;
-    SqlWidget*   m_sqlWidget;
+    bool m_connexionEnabled;
+
+    QLineEdit   *m_hostName;
+    QLineEdit   *m_userName;
+    QLineEdit   *m_password;
+    //QLineEdit   *m_port;
+    QLineEdit   *m_databaseName;
+    QPushButton *m_connexionButton;
 
 signals:
 
 public slots:
+    void changeDBConnexionStatus();
 
 };
 
 //----------------------------------------------------------------------------
 
-#endif // MAINWINDOW_H
+#endif // SQLWIDGET_H
 
 //----------------------------------------------------------------------------
