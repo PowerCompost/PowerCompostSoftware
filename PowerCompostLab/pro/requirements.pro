@@ -1,6 +1,6 @@
 #================================================
 #
-# PowerCompostExperimentManger Project
+# PowerCompostLab Project
 #
 #================================================
 
@@ -8,11 +8,11 @@
 TEMPLATE = subdirs
 
 # List of the targets
-SUBDIRS  = PowerCompostExperimentManagerApp
+SUBDIRS  = PowerCompostLabApp
 
 # Where the .pro files are
-PowerCompostExperimentManagerApp.file = PowerCompostExperimentManagerApp.pro
+PowerCompostLabApp.file = PowerCompostLabApp.pro
 #SqlWidget.file                        = SqlWidget.pro
 
 # Dependencies
-#PowerCompostExperimentManagerApp.depends = SqlWidget
+#PowerCompostLabApp.depends = SqlWidget

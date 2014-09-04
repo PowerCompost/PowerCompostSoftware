@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 
-#include "PowerCompostExperimentManager/MainWindow.h"
+#include "PowerCompostLab/MainWindow.h"
 
 //----------------------------------------------------------------------------
 

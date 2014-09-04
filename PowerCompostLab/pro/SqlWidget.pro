@@ -1,6 +1,6 @@
 #=================================================
 #
-# PowerCompostLabApp Project file 
+# SqlWidget Project file 
 #
 #=================================================
 
@@ -8,24 +8,25 @@
 # Qt dependencies
 #-------------------------------------------------
 
-QT       += core gui sql
+#QT       += core gui sql
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-#-------------------------------------------------
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 #-------------------------------------------------
-# PowerCompostLabApp
+
+#-------------------------------------------------
+# PowerCompostExperimentManagerApp
 #-------------------------------------------------
 
 # Type 
-TEMPLATE     = app
+TEMPLATE     = lib
+CONFIG       = staticlib
 
 # Target name
-TARGET       = PowerCompostLab
+TARGET       = libSqlWidget
 
 # Target dir
-DESTDIR      = ../bin/
+DESTDIR      = ../lib/
 
 # Target directories for moc and object files
 MOC_DIR      = ../tmp/moc/
@@ -33,17 +34,9 @@ OBJECTS_DIR  = ../tmp/o/
 
 # Where to look for included files in sources and headers
 INCLUDEPATH += ..
-#INCLUDEPATH += ../lib
 
-# Libraries
-#LIBS += -L../lib -lSqlWidget
+SOURCES     += ../src/SqlWidget.cpp
 
-# Sources
-SOURCES     += ../app/PowerCompostLabApp.cpp\
-               ../src/MainWindow.cpp \
-               ../src/SqlWidget.cpp
-
-HEADERS     += ../PowerCompostLab/MainWindow.h \
-               ../PowerCompostLab/SqlWidget.h
+HEADERS     += ../PowerCompostExperimentManager/SqlWidget.h
 
 #-------------------------------------------------

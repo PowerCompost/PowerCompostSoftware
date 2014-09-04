@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 
-#include "PowerCompostExperimentManager/SqlWidget.h"
+#include "PowerCompostLab/SqlWidget.h"
 
 //----------------------------------------------------------------------------
 
