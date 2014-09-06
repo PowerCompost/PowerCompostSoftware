@@ -45,7 +45,7 @@ SqlWidget::SqlWidget(QSqlDatabase& database, QWidget *parent)
     layoutDatabaseName->addWidget(databaseLabel);
     layoutDatabaseName->addWidget(m_databaseName);
 
-    m_connexionButton = new QPushButton("Connexion", widgetDBConnexion);
+    m_connexionButton = new QPushButton(tr("Log on"), widgetDBConnexion);
 
     QHBoxLayout *layoutWidgetDBConnexion = new QHBoxLayout;
     layoutWidgetDBConnexion->setAlignment(Qt::AlignHCenter);
