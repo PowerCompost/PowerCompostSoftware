@@ -47,7 +47,7 @@ target.path=../installed/bin
 INSTALLS += target
 
 # Instructions to add and link properly PowerCompost libs
-unix:!macx {
+macx {
 APP_DESTDIR = bin/$${TARGET}.app/Contents/MacOS
 APP_DESTLIB = $${APP_DESTDIR}/../lib
 QMAKE_POST_LINK += mkdir -p $${APP_DESTLIB} ;
