@@ -7,7 +7,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setWindowTitle("PowerCompost");
+    setWindowTitle("PowerCompostLab");
     
     m_sqlWidget = new SqlWidget(m_database, this);
 
