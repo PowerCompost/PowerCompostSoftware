@@ -47,10 +47,11 @@ target.path=../installed/bin
 INSTALLS += target
 
 # Instructions to add and link properly PowerCompost libs
+unix:!macx {
 APP_DESTDIR = bin/$${TARGET}.app/Contents/MacOS
 APP_DESTLIB = $${APP_DESTDIR}/../lib
 QMAKE_POST_LINK += mkdir -p $${APP_DESTLIB} ;
 QMAKE_POST_LINK += cp -r $$PWD/../installed/lib/SqlWidget $${APP_DESTLIB}/SqlWidget ;
 QMAKE_POST_LINK += install_name_tool -change libSqlWidget.1.dylib @loader_path/../lib/SqlWidget/libSqlWidget.1.dylib $${APP_DESTDIR}/$${TARGET};
-
+}
 #-------------------------------------------------
