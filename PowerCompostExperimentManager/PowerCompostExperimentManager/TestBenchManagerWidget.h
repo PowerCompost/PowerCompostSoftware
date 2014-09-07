@@ -1,11 +1,5 @@
 //----------------------------------------------------------------------------
 
-#if defined TESTBENCHMANAGERWIDGET
-#define TESTBENCHMANAGERWIDGET_COMMON_DLLSPEC  Q_DECL_EXPORT
-#else
-#define TESTBENCHMANAGERWIDGET_COMMON_DLLSPEC Q_DECL_IMPORT
-#endif
-
 #ifndef TESTBENCHMANAGERWIDGET_H
 #define TESTBENCHMANAGERWIDGET_H
 
