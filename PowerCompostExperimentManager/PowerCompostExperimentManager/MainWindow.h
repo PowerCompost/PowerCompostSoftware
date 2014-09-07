@@ -7,6 +7,7 @@
 
 // Specific header files
 #include "TestBenchManagerWidget.h"
+#include "ExperimentManagerWidget.h"
 
 // Specific libs
 #include <SqlWidget/SqlWidget.h>
