@@ -35,13 +35,15 @@ OBJECTS_DIR  = tmp/o/
 unix|win32: LIBS += -L$$PWD/../installed/lib/SqlWidget/ -lSqlWidget
 
 INCLUDEPATH += $$PWD/../installed/include/
-DEPENDPATH += $$PWD/../installed/lib/
+DEPENDPATH  += $$PWD/../installed/lib/
 
 # Sources
 SOURCES     += app/PowerCompostExperimentManagerApp.cpp \
-               src/MainWindow.cpp 
+               src/MainWindow.cpp \
+               src/TestBenchManagerWidget.cpp 
 
-HEADERS     += PowerCompostExperimentManager/MainWindow.h 
+HEADERS     += PowerCompostExperimentManager/MainWindow.h \
+               PowerCompostExperimentManager/TestBenchManagerWidget.h
 
 target.path=../installed/bin
 INSTALLS += target

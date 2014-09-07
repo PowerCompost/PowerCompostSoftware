@@ -6,12 +6,14 @@
 //----------------------------------------------------------------------------
 
 // Specific header files
+#include "TestBenchManagerWidget.h"
+
+// Specific libs
 #include <SqlWidget/SqlWidget.h>
 
 //----------------------------------------------------------------------------
 
 // Qt headers
-
 #include <QtGui>
 #include <QtWidgets>
 #include <QtSql>
@@ -27,8 +29,9 @@ public:
     ~MainWindow();
 
 private:
-    QSqlDatabase m_database;
-    SqlWidget*   m_sqlWidget;
+    QSqlDatabase            m_database;
+    SqlWidget*              m_sqlWidget;
+    TestBenchManagerWidget* m_testBenchManager;
 
 signals:
 
