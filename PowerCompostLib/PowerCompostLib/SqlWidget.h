@@ -43,10 +43,12 @@ private:
     QPushButton *m_connexionButton;
 
 signals:
+    void connexionEnabled(bool);
+    void disableWidgets();
 
 public slots:
-    void changeDBConnexionStatus();
-
+    void changeConnexionStatus();
+    void setDisabledWidgets();
 };
 
 //----------------------------------------------------------------------------

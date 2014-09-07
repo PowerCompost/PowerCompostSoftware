@@ -63,7 +63,9 @@ SqlWidget::SqlWidget(QSqlDatabase& database, QWidget *parent)
 
     setLayout(layoutWidget);
 
-    connect(m_connexionButton, SIGNAL(clicked()), this, SLOT(changeDBConnexionStatus()));
+    connect(m_connexionButton, SIGNAL(clicked()), this, SLOT(changeConnexionStatus()));
+    
+    connect(this, SIGNAL(disableWidgets()), this, SLOT(setDisabledWidgets()));
 
     m_connexionEnabled = false;
 
@@ -76,7 +78,7 @@ SqlWidget::~SqlWidget()
 
 //----------------------------------------------------------------------------
 
-void SqlWidget::changeDBConnexionStatus()
+void SqlWidget::changeConnexionStatus()
 {
     if(!m_connexionEnabled)
     {
@@ -94,11 +96,6 @@ void SqlWidget::changeDBConnexionStatus()
             {
                 m_connexionEnabled = true;
 
-                m_hostName->setDisabled(true);
-                //m_port->setDisabled(true);
-                m_userName->setDisabled(true);
-                m_password->setDisabled(true);
-                m_databaseName->setDisabled(true);
                 m_connexionButton->setText(tr("Log off"));
             }
             else
@@ -115,13 +112,20 @@ void SqlWidget::changeDBConnexionStatus()
         m_database.close();
         m_connexionEnabled = false;
 
-        m_hostName->setDisabled(false);
-        //m_port->setDisabled(false);
-        m_userName->setDisabled(false);
-        m_password->setDisabled(false);
-        m_databaseName->setDisabled(false);
         m_connexionButton->setText(tr("Log on"));
     }
+
+    emit disableWidgets();
+    emit connexionEnabled(m_connexionEnabled);
+}
+
+void SqlWidget::setDisabledWidgets()
+{
+        m_hostName->setDisabled(m_connexionEnabled);
+        //m_port->setDisabled(m_connexionEnabled);
+        m_userName->setDisabled(m_connexionEnabled);
+        m_password->setDisabled(m_connexionEnabled);
+        m_databaseName->setDisabled(m_connexionEnabled);
 }
 
 //----------------------------------------------------------------------------
