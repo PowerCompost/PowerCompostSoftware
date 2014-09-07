@@ -49,17 +49,28 @@ private:
     QLineEdit   *m_y;
     QLineEdit   *m_z;
 
+    QPushButton *m_buttonDialogAdd;
+    QPushButton *m_buttonDialogEdit;
+    QPushButton *m_buttonDialogDelete;
 
 signals:
     void connexionStatusChanged();
+    void closeDialog();
 
 public slots:
     void setConnexionEnabled(bool);
     void enableWidgets();
 
     void addTestBenchDialog();
+    void enableButtonDialogAdd();
+
     void editTestBenchDialog();
+    void enableButtonDialogEdit();
+    void enableButtonDialogEdit(int);
+    void updateXYZ(QString);
+
     void deleteTestBenchDialog();
+    void enableButtonDialogDelete(int);
 
     void addTestBench();
     void editTestBench();

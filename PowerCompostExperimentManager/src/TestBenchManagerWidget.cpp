@@ -89,11 +89,11 @@ void TestBenchManagerWidget::addTestBenchDialog()
     layoutZ->addWidget(zLabel);
     layoutZ->addWidget(m_z);
 
-    QPushButton *buttonAdd     = new QPushButton(tr("Add"));
-    QPushButton *buttonCancel  = new QPushButton(tr("Cancel"));
-    QHBoxLayout *layoutButtons = new QHBoxLayout;
+                m_buttonDialogAdd = new QPushButton(tr("Add"));
+    QPushButton *buttonCancel     = new QPushButton(tr("Cancel"));
+    QHBoxLayout *layoutButtons    = new QHBoxLayout;
 
-    layoutButtons->addWidget(buttonAdd);
+    layoutButtons->addWidget(m_buttonDialogAdd);
     layoutButtons->addWidget(buttonCancel);
    
     QVBoxLayout *layoutDialog = new QVBoxLayout;
@@ -105,16 +105,31 @@ void TestBenchManagerWidget::addTestBenchDialog()
 
     dialogBox = new QDialog();
     dialogBox->setLayout(layoutDialog);
-
-    connect(buttonAdd, SIGNAL(clicked()), this, SLOT(addTestBench()));
+    
+    connect(this, SIGNAL(closeDialog()), dialogBox, SLOT(accept()));
+    connect(m_buttonDialogAdd, SIGNAL(clicked()), this, SLOT(addTestBench()));
     connect(buttonCancel, SIGNAL(clicked()), dialogBox, SLOT(accept()));
+
+    m_buttonDialogAdd->setEnabled(false);
+    connect(m_name, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
 
     dialogBox->exec();
 }
 
+void TestBenchManagerWidget::enableButtonDialogAdd()
+{
+    if(m_name->text().isEmpty() || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
+        m_buttonDialogAdd->setEnabled(false);
+    else
+        m_buttonDialogAdd->setEnabled(true);
+}
+
 void TestBenchManagerWidget::editTestBenchDialog()
 {
-    m_names                    = new QComboBox();
+                m_names        = new QComboBox();
     QLabel      *namesLabel    = new QLabel(tr("Test benches: "));
     QHBoxLayout *layoutNames   = new QHBoxLayout;
 
@@ -142,11 +157,11 @@ void TestBenchManagerWidget::editTestBenchDialog()
     layoutZ->addWidget(zLabel);
     layoutZ->addWidget(m_z);
 
-    QPushButton *buttonEdit    = new QPushButton(tr("Edit"));
-    QPushButton *buttonCancel  = new QPushButton(tr("Cancel"));
-    QHBoxLayout *layoutButtons = new QHBoxLayout;
+                m_buttonDialogEdit = new QPushButton(tr("Edit"));
+    QPushButton *buttonCancel      = new QPushButton(tr("Cancel"));
+    QHBoxLayout *layoutButtons     = new QHBoxLayout;
 
-    layoutButtons->addWidget(buttonEdit);
+    layoutButtons->addWidget(m_buttonDialogEdit);
     layoutButtons->addWidget(buttonCancel);
    
     QVBoxLayout *layoutDialog = new QVBoxLayout;
@@ -159,26 +174,78 @@ void TestBenchManagerWidget::editTestBenchDialog()
     dialogBox = new QDialog();
     dialogBox->setLayout(layoutDialog);
 
-    connect(buttonEdit, SIGNAL(clicked()), this, SLOT(editTestBench()));
+    connect(this, SIGNAL(closeDialog()), dialogBox, SLOT(accept()));
+    connect(m_buttonDialogEdit, SIGNAL(clicked()), this, SLOT(editTestBench()));
     connect(buttonCancel, SIGNAL(clicked()), dialogBox, SLOT(accept()));
+
+    m_names->addItem(tr("Select a test bench..."));
+    QSqlQuery query;
+    if(query.exec(QString("SELECT %1 FROM %2").arg("name").arg("Test_benches")))
+    {
+        while(query.next())
+        {
+            m_names->addItem(query.value(0).toString());
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+
+    m_buttonDialogEdit->setEnabled(false);
+    connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit(int)));
+    connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_names, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateXYZ(QString)));
 
     dialogBox->exec();
 }
 
+void TestBenchManagerWidget::enableButtonDialogEdit()
+{
+    if(m_names->currentIndex() == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
+        m_buttonDialogEdit->setEnabled(false);
+    else
+        m_buttonDialogEdit->setEnabled(true);
+}
+
+void TestBenchManagerWidget::enableButtonDialogEdit(int index)
+{
+    if(index == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
+       m_buttonDialogEdit->setEnabled(false);
+    else
+        m_buttonDialogEdit->setEnabled(true);
+}
+
+void TestBenchManagerWidget::updateXYZ(QString testBenchName)
+{
+    QSqlQuery query;
+    if(query.exec(QString("SELECT x,y,z FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(testBenchName)))
+    {
+        while(query.next())
+        {
+            m_x->setText(query.value(0).toString());
+            m_y->setText(query.value(1).toString());
+            m_z->setText(query.value(2).toString());
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+}
+
 void TestBenchManagerWidget::deleteTestBenchDialog()
 {
-    m_names                    = new QComboBox();
+                m_names        = new QComboBox();
     QLabel      *namesLabel    = new QLabel(tr("Test benches: "));
     QHBoxLayout *layoutNames   = new QHBoxLayout;
 
     layoutNames->addWidget(namesLabel);
     layoutNames->addWidget(m_names);
 
-    QPushButton *buttonDelete  = new QPushButton(tr("Delete"));
-    QPushButton *buttonCancel  = new QPushButton(tr("Cancel"));
-    QHBoxLayout *layoutButtons = new QHBoxLayout;
+                m_buttonDialogDelete = new QPushButton(tr("Delete"));
+    QPushButton *buttonCancel        = new QPushButton(tr("Cancel"));
+    QHBoxLayout *layoutButtons       = new QHBoxLayout;
 
-    layoutButtons->addWidget(buttonDelete);
+    layoutButtons->addWidget(m_buttonDialogDelete);
     layoutButtons->addWidget(buttonCancel);
    
     QVBoxLayout *layoutDialog = new QVBoxLayout;
@@ -188,26 +255,85 @@ void TestBenchManagerWidget::deleteTestBenchDialog()
     dialogBox = new QDialog();
     dialogBox->setLayout(layoutDialog);
 
-    connect(buttonDelete, SIGNAL(clicked()), this, SLOT(deleteTestBench()));
+    connect(this, SIGNAL(closeDialog()), dialogBox, SLOT(accept()));
+    connect(m_buttonDialogDelete, SIGNAL(clicked()), this, SLOT(deleteTestBench()));
     connect(buttonCancel, SIGNAL(clicked()), dialogBox, SLOT(accept()));
 
+    m_names->addItem(tr("Select a test bench..."));
+    QSqlQuery query;
+    if(query.exec(QString("SELECT %1 FROM %2").arg("name").arg("Test_benches")))
+    {
+        while(query.next())
+        {
+            m_names->addItem(query.value(0).toString());
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+
+    m_buttonDialogDelete->setEnabled(false);
+    connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogDelete(int)));
+
     dialogBox->exec();
+}
+
+void TestBenchManagerWidget::enableButtonDialogDelete(int index)
+{
+    if(index == 0)
+        m_buttonDialogDelete->setEnabled(false);
+    else
+        m_buttonDialogDelete->setEnabled(true);
 }
 
 //----------------------------------------------------------------------------
 
 void TestBenchManagerWidget::addTestBench()
 {
+    QSqlQuery query;
 
+    if(query.exec(QString("SELECT * FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(m_name->text())))
+    {
+        if(query.size() > 0)
+            QMessageBox::critical(dialogBox, tr("Error"), tr("A test bench with this name is already existing."));
+        else
+        {
+            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, %5)").arg("Test_benches").arg(m_name->text()).arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt())))
+            {
+                QMessageBox::information(this, tr("Result"), tr("Test bench succesfully added"));
+                emit closeDialog();
+            }
+            else
+                QMessageBox::critical(dialogBox, tr("Error"), tr("Insertion of the test bench in the database failed."));
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 }
 
 void TestBenchManagerWidget::editTestBench()
 {
+    QSqlQuery query;
 
+    if(query.exec(QString("UPDATE %1 SET x=%2, y=%3, z=%4 WHERE name=\"%5\"").arg("Test_benches").arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_names->currentText())))
+    {
+        QMessageBox::information(this, tr("Result"), tr("Test bench succesfully edited"));
+        emit closeDialog();
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Edition of the test bench in the database failed."));
 }
 
 void TestBenchManagerWidget::deleteTestBench()
 {
+    QSqlQuery query;
+
+    if(query.exec(QString("DELETE FROM %1 WHERE name=\"%2\"").arg("Test_benches").arg(m_names->currentText())))
+    {
+        QMessageBox::information(this, tr("Result"), tr("Test bench succesfully deleted"));
+        emit closeDialog();
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Edition of the test bench in the database failed."));
 
 }
 
