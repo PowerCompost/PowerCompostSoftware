@@ -12,15 +12,7 @@
 // Qt headers
 
 #include <QtSql>
-#include <QFormLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QDialog>
-#include <QMessageBox>
-#include <QGroupBox>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
+#include <QtWidgets>
 
 //----------------------------------------------------------------------------
 
@@ -37,12 +29,52 @@ private:
 
     bool m_connexionEnabled;
 
+    QPushButton *m_buttonStart;
+    QPushButton *m_buttonStop;
+    QPushButton *m_buttonEdit;
+
+    QDialog     *dialogBox;
+
+    QLineEdit   *m_nameExperiment;
+    QComboBox   *m_namesExperiments;
+    QComboBox   *m_namesTestBenches;
+    QLineEdit   *m_x;
+    QLineEdit   *m_y;
+    QLineEdit   *m_z;
+    QDateTimeEdit *m_dateStart;
+    QDateTimeEdit *m_dateStop;
+    QLineEdit *m_volumetricMass;
+    QLineEdit *m_thermalCapacity;
+    QLineEdit *m_thermalConductivity;
+    QTextEdit *m_comments;
+
+    QPushButton *m_buttonDialogStart;
+    QPushButton *m_buttonDialogStop;
+    QPushButton *m_buttonDialogEdit;
+
 signals:
     void connexionStatusChanged();
+    void closeDialog();
 
 public slots:
     void setConnexionEnabled(bool);
     void enableWidgets();
+
+    void startExperimentDialog();
+    void enableButtonDialogStart();
+
+    void stopExperimentDialog();
+    void enableButtonDialogStop();
+
+    void editExperimentDialog();
+    void enableButtonDialogEdit();
+
+    void updateXYZ(QString);
+    void updateExperiment(QString);
+
+    void startExperiment();
+    void stopExperiment();
+    void editExperiment();
 
 };
 
