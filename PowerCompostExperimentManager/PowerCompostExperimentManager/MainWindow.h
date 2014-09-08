@@ -30,10 +30,10 @@ public:
     ~MainWindow();
 
 private:
-    QSqlDatabase            m_database;
-    SqlWidget*              m_sqlWidget;
-    TestBenchManagerWidget* m_testBenchManager;
-
+    QSqlDatabase              m_database;
+    SqlWidget*                m_sqlWidget;
+    TestBenchManagerWidget*   m_testBenchManager;
+    ExperimentManagerWidget*  m_experimentManager;
 signals:
 
 public slots:
