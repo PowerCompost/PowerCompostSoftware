@@ -41,11 +41,15 @@ DEPENDPATH  += $$PWD/../installed/lib/
 SOURCES     += app/PowerCompostExperimentManagerApp.cpp \
                src/MainWindow.cpp \
                src/TestBenchManagerWidget.cpp \
-               src/ExperimentManagerWidget.cpp 
+               src/ExperimentManagerWidget.cpp \
+               src/SensorsManagerWidget.cpp \
+               src/SensorWidget.cpp 
 
 HEADERS     += PowerCompostExperimentManager/MainWindow.h \
                PowerCompostExperimentManager/TestBenchManagerWidget.h \
-               PowerCompostExperimentManager/ExperimentManagerWidget.h
+               PowerCompostExperimentManager/ExperimentManagerWidget.h \
+               PowerCompostExperimentManager/SensorsManagerWidget.h \
+               PowerCompostExperimentManager/SensorWidget.h
 
 target.path=../installed/bin
 INSTALLS += target
