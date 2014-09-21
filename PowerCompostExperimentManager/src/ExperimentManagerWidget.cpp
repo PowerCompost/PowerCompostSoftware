@@ -75,27 +75,6 @@ void ExperimentManagerWidget::startExperimentDialog()
     layoutNamesTestBenches->addWidget(namesTestBenchesLabel);
     layoutNamesTestBenches->addWidget(m_namesTestBenches);
 
-                m_x        = new QLineEdit();
-    QLabel      *xLabel    = new QLabel(tr("X (cm): "));
-    QHBoxLayout *layoutX   = new QHBoxLayout;
-
-    layoutX->addWidget(xLabel);
-    layoutX->addWidget(m_x);
-
-                m_y        = new QLineEdit();
-    QLabel      *yLabel    = new QLabel(tr("Y (cm): "));
-    QHBoxLayout *layoutY   = new QHBoxLayout;
-
-    layoutY->addWidget(yLabel);
-    layoutY->addWidget(m_y);
-
-                m_z        = new QLineEdit();
-    QLabel      *zLabel    = new QLabel(tr("Z (cm): "));
-    QHBoxLayout *layoutZ   = new QHBoxLayout;
-
-    layoutZ->addWidget(zLabel);
-    layoutZ->addWidget(m_z);
-
                 m_volumetricMass        = new QLineEdit();
     QLabel      *volumetricMassLabel    = new QLabel(tr("Volumetric mass (kg.m^-3): "));
     QHBoxLayout *layoutVolumetricMass   = new QHBoxLayout;
@@ -141,9 +120,6 @@ void ExperimentManagerWidget::startExperimentDialog()
     QVBoxLayout *layoutDialog = new QVBoxLayout;
     layoutDialog->addLayout(layoutNameExperiment);
     layoutDialog->addLayout(layoutNamesTestBenches);
-    layoutDialog->addLayout(layoutX);
-    layoutDialog->addLayout(layoutY);
-    layoutDialog->addLayout(layoutZ);
     layoutDialog->addLayout(layoutVolumetricMass);
     layoutDialog->addLayout(layoutThermalCapacity);
     layoutDialog->addLayout(layoutThermalConductivity);
@@ -178,9 +154,6 @@ void ExperimentManagerWidget::startExperimentDialog()
     m_buttonDialogStart->setEnabled(false);
     connect(m_nameExperiment, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_namesTestBenches, SIGNAL(currentIndexChanged(QString)), this, SLOT(enableButtonDialogStart()));
-    connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
-    connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
-    connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_volumetricMass, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalCapacity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalConductivity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
@@ -191,7 +164,7 @@ void ExperimentManagerWidget::startExperimentDialog()
 
 void ExperimentManagerWidget::enableButtonDialogStart()
 {
-    if(m_nameExperiment->text().isEmpty() || m_namesTestBenches->currentIndex() == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty() || m_volumetricMass->text().isEmpty() || m_thermalCapacity->text().isEmpty() || m_thermalConductivity->text().isEmpty())
+    if(m_nameExperiment->text().isEmpty() || m_namesTestBenches->currentIndex() == 0 || m_volumetricMass->text().isEmpty() || m_thermalCapacity->text().isEmpty() || m_thermalConductivity->text().isEmpty())
         m_buttonDialogStart->setEnabled(false);
     else
         m_buttonDialogStart->setEnabled(true);
@@ -279,27 +252,6 @@ void ExperimentManagerWidget::editExperimentDialog()
     layoutNamesTestBenches->addWidget(namesTestBenchesLabel);
     layoutNamesTestBenches->addWidget(m_namesTestBenches);
 
-                m_x        = new QLineEdit();
-    QLabel      *xLabel    = new QLabel(tr("X (cm): "));
-    QHBoxLayout *layoutX   = new QHBoxLayout;
-
-    layoutX->addWidget(xLabel);
-    layoutX->addWidget(m_x);
-
-                m_y        = new QLineEdit();
-    QLabel      *yLabel    = new QLabel(tr("Y (cm): "));
-    QHBoxLayout *layoutY   = new QHBoxLayout;
-
-    layoutY->addWidget(yLabel);
-    layoutY->addWidget(m_y);
-
-                m_z        = new QLineEdit();
-    QLabel      *zLabel    = new QLabel(tr("Z (cm): "));
-    QHBoxLayout *layoutZ   = new QHBoxLayout;
-
-    layoutZ->addWidget(zLabel);
-    layoutZ->addWidget(m_z);
-
                 m_volumetricMass        = new QLineEdit();
     QLabel      *volumetricMassLabel    = new QLabel(tr("Volumetric mass (kg.m^-3): "));
     QHBoxLayout *layoutVolumetricMass   = new QHBoxLayout;
@@ -352,9 +304,6 @@ void ExperimentManagerWidget::editExperimentDialog()
     QVBoxLayout *layoutDialog = new QVBoxLayout;
     layoutDialog->addLayout(layoutNamesExperiments);
     layoutDialog->addLayout(layoutNamesTestBenches);
-    layoutDialog->addLayout(layoutX);
-    layoutDialog->addLayout(layoutY);
-    layoutDialog->addLayout(layoutZ);
     layoutDialog->addLayout(layoutVolumetricMass);
     layoutDialog->addLayout(layoutThermalCapacity);
     layoutDialog->addLayout(layoutThermalConductivity);
@@ -423,9 +372,6 @@ void ExperimentManagerWidget::editExperimentDialog()
     m_buttonDialogEdit->setEnabled(false);
     connect(m_namesExperiments, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
     connect(m_namesTestBenches, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
     connect(m_volumetricMass, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalCapacity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalConductivity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
@@ -437,33 +383,17 @@ void ExperimentManagerWidget::editExperimentDialog()
 
 void ExperimentManagerWidget::enableButtonDialogEdit()
 {
-    if(m_namesExperiments->currentIndex() == 0 || m_namesTestBenches->currentIndex() == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty() || m_volumetricMass->text().isEmpty() || m_thermalCapacity->text().isEmpty() || m_thermalConductivity->text().isEmpty())
+    if(m_namesExperiments->currentIndex() == 0 || m_namesTestBenches->currentIndex() == 0 || m_volumetricMass->text().isEmpty() || m_thermalCapacity->text().isEmpty() || m_thermalConductivity->text().isEmpty())
         m_buttonDialogEdit->setEnabled(false);
     else
         m_buttonDialogEdit->setEnabled(true);
 }
 
-void ExperimentManagerWidget::updateTestBench(QString testBenchName)
-{
-    QSqlQuery query;
-    if(query.exec(QString("SELECT x,y,z,insulation_thickness FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(testBenchName)))
-    {
-        while(query.next())
-        {
-            unsigned short index = 0;
-            m_x->setText(query.value(index++).toString());
-            m_y->setText(query.value(index++).toString());
-            m_z->setText(query.value(index++).toString());
-        }
-    }
-    else
-        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
-}
 
 void ExperimentManagerWidget::updateExperiment(QString experimentName)
 {
     QSqlQuery query;
-    if(query.exec(QString("SELECT test_bench_name,x,y,z,volumetric_mass,thermal_capacity,thermal_conductivity,comments,initial_time,final_time FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
+    if(query.exec(QString("SELECT test_bench_name,volumetric_mass,thermal_capacity,thermal_conductivity,comments,initial_time,final_time FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
     {
         while(query.next())
         {
@@ -476,9 +406,6 @@ void ExperimentManagerWidget::updateExperiment(QString experimentName)
 
             index++;
 
-            m_x->setText(query.value(index++).toString());
-            m_y->setText(query.value(index++).toString());
-            m_z->setText(query.value(index++).toString());
             m_volumetricMass->setText(query.value(index++).toString());
             m_thermalCapacity->setText(query.value(index++).toString());
             m_thermalConductivity->setText(query.value(index++).toString());

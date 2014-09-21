@@ -38,9 +38,6 @@ private:
     QLineEdit   *m_nameExperiment;
     QComboBox   *m_namesExperiments;
     QComboBox   *m_namesTestBenches;
-    QLineEdit   *m_x;
-    QLineEdit   *m_y;
-    QLineEdit   *m_z;
     QDateTimeEdit *m_dateStart;
     QDateTimeEdit *m_dateStop;
     QLineEdit *m_volumetricMass;
@@ -70,7 +67,6 @@ public slots:
     void editExperimentDialog();
     void enableButtonDialogEdit();
 
-    void updateTestBench(QString);
     void updateExperiment(QString);
 
     void startExperiment();
