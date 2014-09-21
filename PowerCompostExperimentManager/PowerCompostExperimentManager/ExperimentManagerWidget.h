@@ -55,6 +55,7 @@ private:
 signals:
     void connexionStatusChanged();
     void closeDialog();
+    void closeSensorDialog();
 
 public slots:
     void setConnexionEnabled(bool);
@@ -69,7 +70,7 @@ public slots:
     void editExperimentDialog();
     void enableButtonDialogEdit();
 
-    void updateXYZ(QString);
+    void updateTestBench(QString);
     void updateExperiment(QString);
 
     void startExperiment();

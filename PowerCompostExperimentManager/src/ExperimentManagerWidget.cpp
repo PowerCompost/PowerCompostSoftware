@@ -124,8 +124,12 @@ void ExperimentManagerWidget::startExperimentDialog()
     layoutComments->addWidget(commentsLabel);
     layoutComments->addWidget(m_comments);
 
+                m_dateStart        = new QDateEdit();
+    QLabel      *dateStartLabel    = new QLabel(tr("Start: "));
+    QHBoxLayout *layoutDateStart   = new QHBoxLayout;
 
-    // PLACEHOLDER: add dates!
+    layoutDateStart->addWidget(dateStartLabel);
+    layoutDateStart->addWidget(m_dateStart);
 
                 m_buttonDialogStart = new QPushButton(tr("Start"));
     QPushButton *buttonCancel       = new QPushButton(tr("Cancel"));
@@ -144,6 +148,7 @@ void ExperimentManagerWidget::startExperimentDialog()
     layoutDialog->addLayout(layoutThermalCapacity);
     layoutDialog->addLayout(layoutThermalConductivity);
     layoutDialog->addLayout(layoutComments);
+    layoutDialog->addLayout(layoutDateStart);
     layoutDialog->addLayout(layoutButtons);
 
     dialogBox = new QDialog();
@@ -153,8 +158,10 @@ void ExperimentManagerWidget::startExperimentDialog()
     connect(m_buttonDialogStart, SIGNAL(clicked()), this, SLOT(startExperiment()));
     connect(buttonCancel, SIGNAL(clicked()), dialogBox, SLOT(accept()));
 
-    m_namesTestBenches->addItem(tr("Select a test bench..."));
     QSqlQuery query;
+
+    m_namesTestBenches->addItem(tr("Select a test bench..."));
+
     if(query.exec(QString("SELECT %1 FROM %2").arg("name").arg("Test_benches")))
     {
         while(query.next())
@@ -165,6 +172,9 @@ void ExperimentManagerWidget::startExperimentDialog()
     else
         QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
+    m_dateStart->setDateTime(QDateTime::currentDateTime());
+    m_dateStart->setDisplayFormat(QString("yyyy-MM-dd hh:mm:ss")); 
+
     m_buttonDialogStart->setEnabled(false);
     connect(m_nameExperiment, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_namesTestBenches, SIGNAL(currentIndexChanged(QString)), this, SLOT(enableButtonDialogStart()));
@@ -174,7 +184,7 @@ void ExperimentManagerWidget::startExperimentDialog()
     connect(m_volumetricMass, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalCapacity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalConductivity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
-    connect(m_namesTestBenches, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateXYZ(QString)));
+    connect(m_namesTestBenches, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateTestBench(QString)));
 
     dialogBox->exec();
 }
@@ -196,7 +206,12 @@ void ExperimentManagerWidget::stopExperimentDialog()
     layoutNamesExperiments->addWidget(namesExperimentsLabel);
     layoutNamesExperiments->addWidget(m_namesExperiments);
 
-    // PLACEHOLDER: add dates!
+                m_dateStop        = new QDateEdit();
+    QLabel      *dateStopLabel    = new QLabel(tr("Stop: "));
+    QHBoxLayout *layoutDateStop   = new QHBoxLayout;
+
+    layoutDateStop->addWidget(dateStopLabel);
+    layoutDateStop->addWidget(m_dateStop);
 
                 m_buttonDialogStop   = new QPushButton(tr("Stop"));
     QPushButton *buttonCancel        = new QPushButton(tr("Cancel"));
@@ -207,6 +222,7 @@ void ExperimentManagerWidget::stopExperimentDialog()
    
     QVBoxLayout *layoutDialog = new QVBoxLayout;
     layoutDialog->addLayout(layoutNamesExperiments);
+    layoutDialog->addLayout(layoutDateStop);
     layoutDialog->addLayout(layoutButtons);
 
     dialogBox = new QDialog();
@@ -216,8 +232,10 @@ void ExperimentManagerWidget::stopExperimentDialog()
     connect(m_buttonDialogStop, SIGNAL(clicked()), this, SLOT(stopExperiment()));
     connect(buttonCancel, SIGNAL(clicked()), dialogBox, SLOT(accept()));
 
-    m_namesExperiments->addItem(tr("Select an experiment..."));
     QSqlQuery query;
+
+    m_namesExperiments->addItem(tr("Select an experiment..."));
+
     if(query.exec(QString("SELECT %1 FROM %2").arg("name").arg("Experiments")))
     {
         while(query.next())
@@ -228,8 +246,11 @@ void ExperimentManagerWidget::stopExperimentDialog()
     else
         QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
+    m_dateStop->setDateTime(QDateTime::currentDateTime());
+    m_dateStop->setDisplayFormat(QString("yyyy-MM-dd hh:mm:ss")); 
+
     m_buttonDialogStop->setEnabled(false);
-    connect(m_namesExperiments, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogStop(int)));
+    connect(m_namesExperiments, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogStop()));
 
     dialogBox->exec();
 }
@@ -307,8 +328,19 @@ void ExperimentManagerWidget::editExperimentDialog()
     layoutComments->addWidget(commentsLabel);
     layoutComments->addWidget(m_comments);
 
+                m_dateStart        = new QDateEdit();
+    QLabel      *dateStartLabel    = new QLabel(tr("Start: "));
+    QHBoxLayout *layoutDateStart   = new QHBoxLayout;
 
-    // PLACEHOLDER: add dates!
+    layoutDateStart->addWidget(dateStartLabel);
+    layoutDateStart->addWidget(m_dateStart);
+
+                m_dateStop        = new QDateEdit();
+    QLabel      *dateStopLabel    = new QLabel(tr("Stop: "));
+    QHBoxLayout *layoutDateStop   = new QHBoxLayout;
+
+    layoutDateStop->addWidget(dateStopLabel);
+    layoutDateStop->addWidget(m_dateStop);
 
                 m_buttonDialogEdit = new QPushButton(tr("Edit"));
     QPushButton *buttonCancel      = new QPushButton(tr("Cancel"));
@@ -327,6 +359,8 @@ void ExperimentManagerWidget::editExperimentDialog()
     layoutDialog->addLayout(layoutThermalCapacity);
     layoutDialog->addLayout(layoutThermalConductivity);
     layoutDialog->addLayout(layoutComments);
+    layoutDialog->addLayout(layoutDateStart);
+    layoutDialog->addLayout(layoutDateStop);
     layoutDialog->addLayout(layoutButtons);
 
     dialogBox = new QDialog();
@@ -362,6 +396,30 @@ void ExperimentManagerWidget::editExperimentDialog()
     else
         QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
+    m_dateStart->setDisplayFormat(QString("yyyy-MM-dd hh:mm:ss")); 
+
+    if(query.exec(QString("SELECT %1 FROM %2").arg("initial_time").arg("Experiments")))
+    {
+        while(query.next())
+        {
+            m_dateStart->setDateTime(query.value(0).toDateTime());
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+
+    m_dateStop->setDisplayFormat(QString("yyyy-MM-dd hh:mm:ss")); 
+
+    if(query.exec(QString("SELECT %1 FROM %2").arg("final_time").arg("Experiments")))
+    {
+        while(query.next())
+        {
+            m_dateStop->setDateTime(query.value(0).toDateTime());
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+
     m_buttonDialogEdit->setEnabled(false);
     connect(m_namesExperiments, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
     connect(m_namesTestBenches, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
@@ -372,7 +430,7 @@ void ExperimentManagerWidget::editExperimentDialog()
     connect(m_thermalCapacity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_thermalConductivity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
     connect(m_namesExperiments, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateExperiment(QString)));
-    connect(m_namesTestBenches, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateXYZ(QString)));
+    connect(m_namesTestBenches, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateTestBench(QString)));
 
     dialogBox->exec();
 }
@@ -385,16 +443,17 @@ void ExperimentManagerWidget::enableButtonDialogEdit()
         m_buttonDialogEdit->setEnabled(true);
 }
 
-void ExperimentManagerWidget::updateXYZ(QString testBenchName)
+void ExperimentManagerWidget::updateTestBench(QString testBenchName)
 {
     QSqlQuery query;
-    if(query.exec(QString("SELECT x,y,z FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(testBenchName)))
+    if(query.exec(QString("SELECT x,y,z,insulation_thickness FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(testBenchName)))
     {
         while(query.next())
         {
-            m_x->setText(query.value(0).toString());
-            m_y->setText(query.value(1).toString());
-            m_z->setText(query.value(2).toString());
+            unsigned short index = 0;
+            m_x->setText(query.value(index++).toString());
+            m_y->setText(query.value(index++).toString());
+            m_z->setText(query.value(index++).toString());
         }
     }
     else
@@ -404,22 +463,28 @@ void ExperimentManagerWidget::updateXYZ(QString testBenchName)
 void ExperimentManagerWidget::updateExperiment(QString experimentName)
 {
     QSqlQuery query;
-    if(query.exec(QString("SELECT test_bench_name,x,y,z,volumetric_mass,thermal_capacity,thermal_conductivity,comments FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
+    if(query.exec(QString("SELECT test_bench_name,x,y,z,volumetric_mass,thermal_capacity,thermal_conductivity,comments,initial_time,final_time FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
     {
         while(query.next())
         {
-            if(m_namesTestBenches->findText(query.value(0).toString()) >= 0)
-                m_namesTestBenches->setCurrentIndex(m_namesTestBenches->findText(query.value(0).toString()));
+            unsigned short index = 0;
+
+            if(m_namesTestBenches->findText(query.value(index).toString()) >= 0)
+                m_namesTestBenches->setCurrentIndex(m_namesTestBenches->findText(query.value(index).toString()));
             else
                 QMessageBox::critical(dialogBox, tr("Error"), tr("Database consistency error: unknown test bench."));
 
-            m_x->setText(query.value(1).toString());
-            m_y->setText(query.value(2).toString());
-            m_z->setText(query.value(3).toString());
-            m_volumetricMass->setText(query.value(4).toString());
-            m_thermalCapacity->setText(query.value(5).toString());
-            m_thermalConductivity->setText(query.value(6).toString());
-            m_comments->setText(query.value(7).toString());
+            index++;
+
+            m_x->setText(query.value(index++).toString());
+            m_y->setText(query.value(index++).toString());
+            m_z->setText(query.value(index++).toString());
+            m_volumetricMass->setText(query.value(index++).toString());
+            m_thermalCapacity->setText(query.value(index++).toString());
+            m_thermalConductivity->setText(query.value(index++).toString());
+            m_comments->setText(query.value(index++).toString());
+            m_dateStart->setDateTime(query.value(index++).toDateTime());
+            m_dateStop->setDateTime(query.value(index++).toDateTime());
         }
     }
     else
@@ -474,7 +539,7 @@ void ExperimentManagerWidget::editExperiment()
 //        emit closeDialog();
 //    }
 //    else
-//        QMessageBox::critical(dialogBox, tr("Error"), tr("Edition of the test bench in the database failed."));
+//        QMessageBox::critical(dialogBox, tr("Error"), tr("Deletion of the test bench in the database failed."));
 }
 
 //----------------------------------------------------------------------------
