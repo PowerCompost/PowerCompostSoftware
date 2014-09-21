@@ -89,6 +89,13 @@ void TestBenchManagerWidget::addTestBenchDialog()
     layoutZ->addWidget(zLabel);
     layoutZ->addWidget(m_z);
 
+                m_insulationThickness        = new QLineEdit();
+    QLabel      *insulationThicknessLabel    = new QLabel(tr("Insulation thickness (cm): "));
+    QHBoxLayout *layoutInsulationThickness   = new QHBoxLayout;
+
+    layoutInsulationThickness->addWidget(insulationThicknessLabel);
+    layoutInsulationThickness->addWidget(m_insulationThickness);
+
                 m_buttonDialogAdd = new QPushButton(tr("Add"));
     QPushButton *buttonCancel     = new QPushButton(tr("Cancel"));
     QHBoxLayout *layoutButtons    = new QHBoxLayout;
@@ -101,6 +108,7 @@ void TestBenchManagerWidget::addTestBenchDialog()
     layoutDialog->addLayout(layoutX);
     layoutDialog->addLayout(layoutY);
     layoutDialog->addLayout(layoutZ);
+    layoutDialog->addLayout(layoutInsulationThickness);
     layoutDialog->addLayout(layoutButtons);
 
     dialogBox = new QDialog();
@@ -115,13 +123,14 @@ void TestBenchManagerWidget::addTestBenchDialog()
     connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
     connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
     connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_insulationThickness, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
 
     dialogBox->exec();
 }
 
 void TestBenchManagerWidget::enableButtonDialogAdd()
 {
-    if(m_name->text().isEmpty() || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
+    if(m_name->text().isEmpty() || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty() || m_insulationThickness->text().isEmpty())
         m_buttonDialogAdd->setEnabled(false);
     else
         m_buttonDialogAdd->setEnabled(true);
@@ -157,6 +166,13 @@ void TestBenchManagerWidget::editTestBenchDialog()
     layoutZ->addWidget(zLabel);
     layoutZ->addWidget(m_z);
 
+                m_insulationThickness        = new QLineEdit();
+    QLabel      *insulationThicknessLabel    = new QLabel(tr("Insulation thickness (cm): "));
+    QHBoxLayout *layoutInsulationThickness   = new QHBoxLayout;
+
+    layoutInsulationThickness->addWidget(insulationThicknessLabel);
+    layoutInsulationThickness->addWidget(m_insulationThickness);
+
                 m_buttonDialogEdit = new QPushButton(tr("Edit"));
     QPushButton *buttonCancel      = new QPushButton(tr("Cancel"));
     QHBoxLayout *layoutButtons     = new QHBoxLayout;
@@ -169,6 +185,7 @@ void TestBenchManagerWidget::editTestBenchDialog()
     layoutDialog->addLayout(layoutX);
     layoutDialog->addLayout(layoutY);
     layoutDialog->addLayout(layoutZ);
+    layoutDialog->addLayout(layoutInsulationThickness);
     layoutDialog->addLayout(layoutButtons);
 
     dialogBox = new QDialog();
@@ -191,41 +208,37 @@ void TestBenchManagerWidget::editTestBenchDialog()
         QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
     m_buttonDialogEdit->setEnabled(false);
-    connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit(int)));
+    connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
     connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
     connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
     connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_names, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateXYZ(QString)));
+    connect(m_insulationThickness, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+
+    connect(m_names, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateTestBench(QString)));
 
     dialogBox->exec();
 }
 
 void TestBenchManagerWidget::enableButtonDialogEdit()
 {
-    if(m_names->currentIndex() == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
+    if(m_names->currentIndex() == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty() || m_insulationThickness->text().isEmpty())
         m_buttonDialogEdit->setEnabled(false);
     else
         m_buttonDialogEdit->setEnabled(true);
 }
 
-void TestBenchManagerWidget::enableButtonDialogEdit(int index)
-{
-    if(index == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
-       m_buttonDialogEdit->setEnabled(false);
-    else
-        m_buttonDialogEdit->setEnabled(true);
-}
-
-void TestBenchManagerWidget::updateXYZ(QString testBenchName)
+void TestBenchManagerWidget::updateTestBench(QString testBenchName)
 {
     QSqlQuery query;
-    if(query.exec(QString("SELECT x,y,z FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(testBenchName)))
+    if(query.exec(QString("SELECT x,y,z,insulation_thickness FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(testBenchName)))
     {
         while(query.next())
         {
-            m_x->setText(query.value(0).toString());
-            m_y->setText(query.value(1).toString());
-            m_z->setText(query.value(2).toString());
+            unsigned short index = 0;
+            m_x->setText(query.value(index++).toString());
+            m_y->setText(query.value(index++).toString());
+            m_z->setText(query.value(index++).toString());
+            m_insulationThickness->setText(query.value(index++).toString());
         }
     }
     else
@@ -272,14 +285,14 @@ void TestBenchManagerWidget::deleteTestBenchDialog()
         QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
     m_buttonDialogDelete->setEnabled(false);
-    connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogDelete(int)));
+    connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogDelete()));
 
     dialogBox->exec();
 }
 
-void TestBenchManagerWidget::enableButtonDialogDelete(int index)
+void TestBenchManagerWidget::enableButtonDialogDelete()
 {
-    if(index == 0)
+    if(m_names->currentIndex() == 0)
         m_buttonDialogDelete->setEnabled(false);
     else
         m_buttonDialogDelete->setEnabled(true);
@@ -297,7 +310,7 @@ void TestBenchManagerWidget::addTestBench()
             QMessageBox::critical(dialogBox, tr("Error"), tr("A test bench with this name is already existing."));
         else
         {
-            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, %5)").arg("Test_benches").arg(m_name->text()).arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt())))
+            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, %5, %6)").arg("Test_benches").arg(m_name->text()).arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_insulationThickness->text().toInt())))
             {
                 QMessageBox::information(this, tr("Result"), tr("Test bench succesfully added"));
                 emit closeDialog();
@@ -314,7 +327,7 @@ void TestBenchManagerWidget::editTestBench()
 {
     QSqlQuery query;
 
-    if(query.exec(QString("UPDATE %1 SET x=%2, y=%3, z=%4 WHERE name=\"%5\"").arg("Test_benches").arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_names->currentText())))
+    if(query.exec(QString("UPDATE %1 SET x=%2, y=%3, z=%4, insulation_thickness=%5 WHERE name=\"%6\"").arg("Test_benches").arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_insulationThickness->text().toInt()).arg(m_names->currentText())))
     {
         QMessageBox::information(this, tr("Result"), tr("Test bench succesfully edited"));
         emit closeDialog();
@@ -333,7 +346,7 @@ void TestBenchManagerWidget::deleteTestBench()
         emit closeDialog();
     }
     else
-        QMessageBox::critical(dialogBox, tr("Error"), tr("Edition of the test bench in the database failed."));
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Deletion of the test bench in the database failed."));
 
 }
 

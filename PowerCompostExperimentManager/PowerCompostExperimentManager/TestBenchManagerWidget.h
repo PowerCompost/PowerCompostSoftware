@@ -48,6 +48,7 @@ private:
     QLineEdit   *m_x;
     QLineEdit   *m_y;
     QLineEdit   *m_z;
+    QLineEdit   *m_insulationThickness;
 
     QPushButton *m_buttonDialogAdd;
     QPushButton *m_buttonDialogEdit;
@@ -66,11 +67,10 @@ public slots:
 
     void editTestBenchDialog();
     void enableButtonDialogEdit();
-    void enableButtonDialogEdit(int);
-    void updateXYZ(QString);
+    void updateTestBench(QString);
 
     void deleteTestBenchDialog();
-    void enableButtonDialogDelete(int);
+    void enableButtonDialogDelete();
 
     void addTestBench();
     void editTestBench();
