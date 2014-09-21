@@ -7,7 +7,7 @@
 SensorsManagerWidget::SensorsManagerWidget(QSqlDatabase& database, QWidget *parent)
     : QWidget(parent), m_database(database)
 {
-    QGroupBox *groupBoxSensors = new QGroupBox(tr("Sets of sensors manager: "), this);
+    QGroupBox *groupBoxSensors = new QGroupBox(tr("Sets of sensors: "), this);
 
     m_buttonAdd    = new QPushButton(tr("Add set"), groupBoxSensors);
 //    m_buttonEdit   = new QPushButton(tr("Edit set"), groupBoxSensors);
