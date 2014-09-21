@@ -432,30 +432,30 @@ void ExperimentManagerWidget::enableButtonDialogEdit()
 
 void ExperimentManagerWidget::updateExperiment(QString experimentName)
 {
-    QSqlQuery query;
-    if(query.exec(QString("SELECT test_bench_name,volumetric_mass,thermal_capacity,thermal_conductivity,comments,initial_time,final_time FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
-    {
-        while(query.next())
-        {
-            unsigned short index = 0;
-
-            if(m_namesTestBenches->findText(query.value(index).toString()) >= 0)
-                m_namesTestBenches->setCurrentIndex(m_namesTestBenches->findText(query.value(index).toString()));
-            else
-                QMessageBox::critical(dialogBox, tr("Error"), tr("Database consistency error: unknown test bench."));
-
-            index++;
-
-            m_volumetricMass->setText(query.value(index++).toString());
-            m_thermalCapacity->setText(query.value(index++).toString());
-            m_thermalConductivity->setText(query.value(index++).toString());
-            m_comments->setText(query.value(index++).toString());
-            m_dateStart->setDateTime(query.value(index++).toDateTime());
-            m_dateStop->setDateTime(query.value(index++).toDateTime());
-        }
-    }
-    else
-        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+//    QSqlQuery query;
+//    if(query.exec(QString("SELECT test_bench_name,volumetric_mass,thermal_capacity,thermal_conductivity,comments,initial_time,final_time FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
+//    {
+//        while(query.next())
+//        {
+//            unsigned short index = 0;
+//
+//            if(m_namesTestBenches->findText(query.value(index).toString()) >= 0)
+//                m_namesTestBenches->setCurrentIndex(m_namesTestBenches->findText(query.value(index).toString()));
+//            else
+//                QMessageBox::critical(dialogBox, tr("Error"), tr("Database consistency error: unknown test bench."));
+//
+//            index++;
+//
+//            m_volumetricMass->setText(query.value(index++).toString());
+//            m_thermalCapacity->setText(query.value(index++).toString());
+//            m_thermalConductivity->setText(query.value(index++).toString());
+//            m_comments->setText(query.value(index++).toString());
+//            m_dateStart->setDateTime(query.value(index++).toDateTime());
+//            m_dateStop->setDateTime(query.value(index++).toDateTime());
+//        }
+//    }
+//    else
+//        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 }
 
 //----------------------------------------------------------------------------
