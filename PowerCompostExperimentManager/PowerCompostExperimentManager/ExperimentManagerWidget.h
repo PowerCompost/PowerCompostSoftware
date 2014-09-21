@@ -38,6 +38,7 @@ private:
     QLineEdit   *m_nameExperiment;
     QComboBox   *m_namesExperiments;
     QComboBox   *m_namesTestBenches;
+    QComboBox   *m_namesSetsOfSensors;
     QDateTimeEdit *m_dateStart;
     QDateTimeEdit *m_dateStop;
     QLineEdit *m_volumetricMass;
