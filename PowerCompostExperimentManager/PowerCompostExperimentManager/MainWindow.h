@@ -7,6 +7,7 @@
 
 // Specific header files
 #include "TestBenchManagerWidget.h"
+#include "SensorsManagerWidget.h"
 #include "ExperimentManagerWidget.h"
 
 // Specific libs
@@ -33,7 +34,9 @@ private:
     QSqlDatabase              m_database;
     SqlWidget*                m_sqlWidget;
     TestBenchManagerWidget*   m_testBenchManager;
+    SensorsManagerWidget*     m_sensorsManager;
     ExperimentManagerWidget*  m_experimentManager;
+
 signals:
 
 public slots:
