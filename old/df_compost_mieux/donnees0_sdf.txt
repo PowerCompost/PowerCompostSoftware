@@ -1,0 +1,63 @@
+<TAS Name="Tas1" >
+
+# Description textuelle cohérente
+
+<DIMENSIONS>
+1.12 ;
+0.70 ;
+0.70 ;
+</DIMENSIONS>
+
+<CAPTEURS>
+a : 0.1 , 0.1 , 0.1 ,;
+</CAPTEURS>
+
+<ISOLATION>
+
+0.48; #gauche
+0.3;  #droite
+1.8;  #devant
+1.2;  #derrière
+0.48; #bas
+0.48; #haut
+
+</ISOLATION>
+
+lamb = 0.3 ;  #lambda is the thermal conduction [Wm-1K-1]
+rho = 800 ;   #rho is the volumic mass [kgm-3]
+c = 3300 ;    #c is the thermal massic capacity [Jkg-1K-1]
+dt = 100.0 ;  #dt is the time quantum[s]
+tech = 1200 ; #we take the values every 20 minutes
+dx = 0.02 ;   #dx is the space quantum[m]
+duree = 3000000 ; #duree is the time the study is during
+
+<MODELE>
+
+modele = 0 ;     #you choose the order of the chemical reaction (0 or 1) or the combined order (2)
+kreac0 = 180.0 ;  #we want to identify this parameter[J.s-1.m-3] if modele=0
+kreac1 = 0.0000008 ; # [s-1.m-3] if modele=1
+Echim = 100000000.0 ; #this is the concentration of chemical energy at the beginning : we want to identify it too [J/m^3]
+Text = 11.0 ;    #this is the temperature in the edge
+Tint = 11.0 ;
+
+</MODELE>
+
+<TUYAU>
+Tentry = 11.0 ; #Tentry is the température of the incoming water [°C]
+v = 0.0 ;       #v is the speed of the water in the pipe [m/s]
+ceau = 4185.0 ; #ceau is the thermal capacity of water [J/K/kg]
+lambdpipe = 0.1 ; #lambdpipe is the thermal conduction of the pipe [W/K/m]
+rext = 0.02 ;
+rint = 0.018 ;
+hpipe = 2.8 ;  #hpipe is the convection coefficient
+</TUYAU>
+
+<IMAGE>
+
+YN = n ;   #do you want a picture ?
+_|_ y ;    #le plan de l'image est perpendiculaire à x
+cote = 0.30 ;
+
+</IMAGE>
+
+</TAS>
