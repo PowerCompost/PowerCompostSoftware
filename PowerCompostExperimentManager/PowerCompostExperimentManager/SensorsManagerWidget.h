@@ -22,6 +22,7 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QLabel>
 #include <QSpinBox>
 #include <QVector>
@@ -42,19 +43,21 @@ private:
     bool m_connexionEnabled;
 
     QPushButton *m_buttonAdd;
-//    QPushButton *m_buttonEdit;
+    QPushButton *m_buttonEdit;
     QPushButton *m_buttonDelete;
 
     QDialog     *dialogBox;
+    unsigned short m_activeWindow;
 
     QLineEdit   *m_name;
     QComboBox   *m_names;
     QSpinBox    *m_numberOfSensors;
     QVector<SensorWidget*> *m_sensors;
     QVBoxLayout *m_layoutSensors;
+    QTextEdit   *m_comments;
 
     QPushButton *m_buttonDialogAdd;
-//    QPushButton *m_buttonDialogEdit;
+    QPushButton *m_buttonDialogEdit;
     QPushButton *m_buttonDialogDelete;
 
 signals:
@@ -69,15 +72,15 @@ public slots:
     void addSetOfSensorsDialog();
     void enableButtonDialogAdd();
 
-//    void editSetOfSensorsDialog();
-//    void enableButtonDialogEdit();
-//    void updateSetOfSensors(QString);
+    void editSetOfSensorsDialog();
+    void enableButtonDialogEdit();
+    void updateSetOfSensors(QString);
 
     void deleteSetOfSensorsDialog();
     void enableButtonDialogDelete();
 
     void addSetOfSensors();
-//    void editSetOfSensors();
+    void editSetOfSensors();
     void deleteSetOfSensors();
 
 };

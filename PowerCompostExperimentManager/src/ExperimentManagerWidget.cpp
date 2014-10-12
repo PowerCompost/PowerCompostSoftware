@@ -375,7 +375,7 @@ void ExperimentManagerWidget::editExperimentDialog()
 
     m_namesSetsOfSensors->addItem(tr("Select a set of sensors..."));
 
-    if(query.exec(QString("SELECT %1 FROM %2").arg("name").arg("Test_benches")))
+    if(query.exec(QString("SELECT %1 FROM %2").arg("name").arg("Sets_of_sensors")))
     {
         while(query.next())
         {
@@ -386,36 +386,15 @@ void ExperimentManagerWidget::editExperimentDialog()
         QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
     m_dateStart->setDisplayFormat(QString("yyyy-MM-dd hh:mm:ss")); 
-
-    if(query.exec(QString("SELECT %1 FROM %2").arg("initial_time").arg("Experiments")))
-    {
-        while(query.next())
-        {
-            m_dateStart->setDateTime(query.value(0).toDateTime());
-        }
-    }
-    else
-        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
-
     m_dateStop->setDisplayFormat(QString("yyyy-MM-dd hh:mm:ss")); 
-
-    if(query.exec(QString("SELECT %1 FROM %2").arg("final_time").arg("Experiments")))
-    {
-        while(query.next())
-        {
-            m_dateStop->setDateTime(query.value(0).toDateTime());
-        }
-    }
-    else
-        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 
     m_buttonDialogEdit->setEnabled(false);
     connect(m_namesExperiments, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
     connect(m_namesTestBenches, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
     connect(m_namesSetsOfSensors, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_volumetricMass, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
-    connect(m_thermalCapacity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
-    connect(m_thermalConductivity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogStart()));
+    connect(m_volumetricMass, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_thermalCapacity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_thermalConductivity, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
     connect(m_namesExperiments, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateExperiment(QString)));
 
     dialogBox->exec();
@@ -432,81 +411,153 @@ void ExperimentManagerWidget::enableButtonDialogEdit()
 
 void ExperimentManagerWidget::updateExperiment(QString experimentName)
 {
-//    QSqlQuery query;
-//    if(query.exec(QString("SELECT test_bench_name,volumetric_mass,thermal_capacity,thermal_conductivity,comments,initial_time,final_time FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(experimentName)))
-//    {
-//        while(query.next())
-//        {
-//            unsigned short index = 0;
-//
-//            if(m_namesTestBenches->findText(query.value(index).toString()) >= 0)
-//                m_namesTestBenches->setCurrentIndex(m_namesTestBenches->findText(query.value(index).toString()));
-//            else
-//                QMessageBox::critical(dialogBox, tr("Error"), tr("Database consistency error: unknown test bench."));
-//
-//            index++;
-//
-//            m_volumetricMass->setText(query.value(index++).toString());
-//            m_thermalCapacity->setText(query.value(index++).toString());
-//            m_thermalConductivity->setText(query.value(index++).toString());
-//            m_comments->setText(query.value(index++).toString());
-//            m_dateStart->setDateTime(query.value(index++).toDateTime());
-//            m_dateStop->setDateTime(query.value(index++).toDateTime());
-//        }
-//    }
-//    else
-//        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+    QSqlQuery query;
+    if(query.exec(QString("SELECT test_bench_id, sensors_set_id, started, stopped, volumetric_mass, thermal_capacity, thermal_conductivity, comments FROM %1 WHERE name=\"%2\"").arg("Experiments").arg(experimentName)))
+    {
+        while(query.next())
+        {
+            unsigned short index = 0;
+
+            QSqlQuery queryId;
+            
+            queryId.exec(QString("SELECT name FROM %1 WHERE id=%2").arg("Test_benches").arg(query.value(index).toString()));
+            while(queryId.next())
+            {
+                if(m_namesTestBenches->findText(queryId.value(0).toString()) >= 0)
+                    m_namesTestBenches->setCurrentIndex(m_namesTestBenches->findText(queryId.value(0).toString()));
+                else
+                    QMessageBox::critical(dialogBox, tr("Error"), tr("Database consistency error: unknown test bench."));
+            }
+
+            index++;
+
+            queryId.exec(QString("SELECT name FROM %1 WHERE id=%2").arg("Sets_of_sensors").arg(query.value(index).toString()));
+            while(queryId.next())
+            {
+                if(m_namesSetsOfSensors->findText(queryId.value(0).toString()) >= 0)
+                    m_namesSetsOfSensors->setCurrentIndex(m_namesSetsOfSensors->findText(queryId.value(0).toString()));
+                else
+                    QMessageBox::critical(dialogBox, tr("Error"), tr("Database consistency error: unknown set of sensors."));
+            }
+
+            index++;
+
+            m_dateStart->setDateTime(query.value(index++).toDateTime());
+            m_dateStop->setDateTime(query.value(index++).toDateTime());
+            m_volumetricMass->setText(query.value(index++).toString());
+            m_thermalCapacity->setText(query.value(index++).toString());
+            m_thermalConductivity->setText(query.value(index++).toString());
+            m_comments->setText(query.value(index++).toString());
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 }
 
 //----------------------------------------------------------------------------
 
 void ExperimentManagerWidget::startExperiment()
 {
-//    QSqlQuery query;
-//
-//    if(query.exec(QString("SELECT * FROM %1 WHERE name = \"%2\"").arg("Test_benches").arg(m_name->text())))
-//    {
-//        if(query.size() > 0)
-//            QMessageBox::critical(dialogBox, tr("Error"), tr("A test bench with this name is already existing."));
-//        else
-//        {
-//            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, %5)").arg("Test_benches").arg(m_name->text()).arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt())))
-//            {
-//                QMessageBox::information(this, tr("Result"), tr("Test bench succesfully started"));
-//                emit closeDialog();
-//            }
-//            else
-//                QMessageBox::critical(dialogBox, tr("Error"), tr("Insertion of the test bench in the database failed."));
-//        }
-//    }
-//    else
-//        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
+    QSqlQuery query;
+
+    if(query.exec(QString("SELECT * FROM %1 WHERE name = \"%2\"").arg("Experiments").arg(m_nameExperiment->text())))
+    {
+        if(query.size() > 0)
+            QMessageBox::critical(dialogBox, tr("Error"), tr("An experiment with this name is already existing."));
+        else
+        {
+            QString testBenchId;
+            if(query.exec(QString("SELECT id FROM %1 WHERE name=\"%2\"").arg("Test_benches").arg(m_namesTestBenches->currentText())))
+            {
+                while(query.next())
+                {
+                    testBenchId = query.value(0).toString();
+                }
+            }
+
+            QString setOfSensorsId;
+            if(query.exec(QString("SELECT id FROM %1 WHERE name=\"%2\"").arg("Sets_of_sensors").arg(m_namesSetsOfSensors->currentText())))
+            {
+                while(query.next())
+                {
+                    setOfSensorsId = query.value(0).toString();
+                }
+            }
+
+            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, \"%5\", NULL, %6, %7, %8, \"%9\")").arg("Experiments").arg(m_nameExperiment->text()).arg(testBenchId).arg(setOfSensorsId).arg(m_dateStart->dateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(m_volumetricMass->text()).arg(m_thermalCapacity->text()).arg(m_thermalConductivity->text()).arg(m_comments->toPlainText())))
+            {
+                QMessageBox::information(this, tr("Result"), tr("Experiment succesfully started"));
+                emit closeDialog();
+            }
+            else
+                QMessageBox::information(dialogBox, tr("Info"), QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, \"%5\", NULL, %6, %7, %8, \"%9\")").arg("Experiments").arg(m_nameExperiment->text()).arg(testBenchId).arg(setOfSensorsId).arg(m_dateStart->dateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(m_volumetricMass->text()).arg(m_thermalCapacity->text()).arg(m_thermalConductivity->text()).arg(m_comments->toPlainText()));
+                //QMessageBox::critical(dialogBox, tr("Error"), tr("Creation of the experiment in the database failed."));
+        }
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Unsucessful SELECT query."));
 }
 
 void ExperimentManagerWidget::stopExperiment()
 {
-//    QSqlQuery query;
-//
-//    if(query.exec(QString("DELETE FROM %1 WHERE name=\"%2\"").arg("Test_benches").arg(m_names->currentText())))
-//    {
-//        QMessageBox::information(this, tr("Result"), tr("Test bench succesfully stoped"));
-//        emit closeDialog();
-//    }
-//    else
-//        QMessageBox::critical(dialogBox, tr("Error"), tr("Edition of the test bench in the database failed."));
+    QSqlQuery query;
+
+    QString experimentId;
+    if(query.exec(QString("SELECT id FROM %1 WHERE name=\"%2\"").arg("Experiments").arg(m_namesExperiments->currentText())))
+    {
+        while(query.next())
+        {
+            experimentId = query.value(0).toString();
+        }
+    }
+
+    if(query.exec(QString("UPDATE %1 SET stopped=\"%2\" WHERE id=%3").arg("Experiments").arg(m_dateStop->dateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(experimentId)))
+    {
+        QMessageBox::information(this, tr("Result"), tr("Experiment succesfully stopped"));
+        emit closeDialog();
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Stop of the experiment in the database failed."));
 }
 
 void ExperimentManagerWidget::editExperiment()
 {
-//    QSqlQuery query;
-//
-//    if(query.exec(QString("UPDATE %1 SET x=%2, y=%3, z=%4 WHERE name=\"%5\"").arg("Test_benches").arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_names->currentText())))
-//    {
-//        QMessageBox::information(this, tr("Result"), tr("Test bench succesfully edited"));
-//        emit closeDialog();
-//    }
-//    else
-//        QMessageBox::critical(dialogBox, tr("Error"), tr("Deletion of the test bench in the database failed."));
+    QSqlQuery query;
+
+    QString experimentId;
+    if(query.exec(QString("SELECT id FROM %1 WHERE name=\"%2\"").arg("Experiments").arg(m_namesExperiments->currentText())))
+    {
+        while(query.next())
+        {
+            experimentId = query.value(0).toString();
+        }
+    }
+
+    QString testBenchId;
+    if(query.exec(QString("SELECT id FROM %1 WHERE name=\"%2\"").arg("Test_benches").arg(m_namesTestBenches->currentText())))
+    {
+        while(query.next())
+        {
+            testBenchId = query.value(0).toString();
+        }
+    }
+
+    QString setOfSensorsId;
+    if(query.exec(QString("SELECT id FROM %1 WHERE name=\"%2\"").arg("Sets_of_sensors").arg(m_namesSetsOfSensors->currentText())))
+    {
+        while(query.next())
+        {
+            setOfSensorsId = query.value(0).toString();
+        }
+    }
+
+    if(query.exec(QString("UPDATE %1 SET test_bench_id=%2, sensors_set_id=%3, started=\"%4\", stopped=\"%5\", volumetric_mass=%6, thermal_conductivity=%7, thermal_capacity=%8, comments=\"%9\" WHERE id=%10").arg("Experiments").arg(testBenchId).arg(setOfSensorsId).arg(m_dateStart->dateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(m_dateStop->dateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(m_volumetricMass->text()).arg(m_thermalCapacity->text()).arg(m_thermalConductivity->text()).arg(m_comments->toPlainText()).arg(experimentId)))
+    {
+        QMessageBox::information(this, tr("Result"), tr("Experiment succesfully edited"));
+        emit closeDialog();
+    }
+    else
+        QMessageBox::critical(dialogBox, tr("Error"), tr("Edition of the experiment in the database failed."));
 }
 
 //----------------------------------------------------------------------------
