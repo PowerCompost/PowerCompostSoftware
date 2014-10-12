@@ -30,6 +30,11 @@ public:
     int getY();
     int getZ();
 
+    void setName(QString);
+    void setX(int);
+    void setY(int);
+    void setZ(int);
+
     bool isEmpty();
 
 private:

@@ -56,6 +56,28 @@ int SensorWidget::getZ()
 
 //----------------------------------------------------------------------------
 
+void SensorWidget::setName(QString name)
+{
+    m_name->setText(name);
+}
+
+void SensorWidget::setX(int value)
+{
+    m_x->setText(QString::number(value));
+}
+
+void SensorWidget::setY(int value)
+{
+    m_y->setText(QString::number(value));
+}
+
+void SensorWidget::setZ(int value)
+{
+    m_z->setText(QString::number(value));
+}
+
+//----------------------------------------------------------------------------
+
 bool SensorWidget::isEmpty()
 {
     if(m_name->text().isEmpty() || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty())
