@@ -35,6 +35,9 @@ OBJECTS_DIR  = tmp/o/
 unix|win32: LIBS += -L$$PWD/../installed/lib/SqlWidget/ -lSqlWidget
 
 INCLUDEPATH += $$PWD/../installed/include/
+DEPENDPATH  += $$PWD/../installed/include/
+
+INCLUDEPATH += $$PWD/../installed/lib/
 DEPENDPATH  += $$PWD/../installed/lib/
 
 # Sources
@@ -62,4 +65,5 @@ QMAKE_POST_LINK += mkdir -p $${APP_DESTLIB} ;
 QMAKE_POST_LINK += cp -r $$PWD/../installed/lib/SqlWidget $${APP_DESTLIB}/SqlWidget ;
 QMAKE_POST_LINK += install_name_tool -change libSqlWidget.1.dylib @loader_path/../lib/SqlWidget/libSqlWidget.1.dylib $${APP_DESTDIR}/$${TARGET};
 }
+
 #-------------------------------------------------
