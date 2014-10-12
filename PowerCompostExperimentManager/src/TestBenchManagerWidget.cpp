@@ -68,26 +68,26 @@ void TestBenchManagerWidget::addTestBenchDialog()
     layoutName->addWidget(nameLabel);
     layoutName->addWidget(m_name);
 
-                m_x        = new QLineEdit();
-    QLabel      *xLabel    = new QLabel(tr("X (cm): "));
-    QHBoxLayout *layoutX   = new QHBoxLayout;
+                m_length        = new QLineEdit();
+    QLabel      *lengthLabel    = new QLabel(tr("X (cm): "));
+    QHBoxLayout *layoutLength   = new QHBoxLayout;
 
-    layoutX->addWidget(xLabel);
-    layoutX->addWidget(m_x);
+    layoutLength->addWidget(lengthLabel);
+    layoutLength->addWidget(m_length);
 
-                m_y        = new QLineEdit();
-    QLabel      *yLabel    = new QLabel(tr("Y (cm): "));
-    QHBoxLayout *layoutY   = new QHBoxLayout;
+                m_width        = new QLineEdit();
+    QLabel      *widthLabel    = new QLabel(tr("Y (cm): "));
+    QHBoxLayout *layoutWidth   = new QHBoxLayout;
 
-    layoutY->addWidget(yLabel);
-    layoutY->addWidget(m_y);
+    layoutWidth->addWidget(widthLabel);
+    layoutWidth->addWidget(m_width);
 
-                m_z        = new QLineEdit();
-    QLabel      *zLabel    = new QLabel(tr("Z (cm): "));
-    QHBoxLayout *layoutZ   = new QHBoxLayout;
+                m_height        = new QLineEdit();
+    QLabel      *heightLabel    = new QLabel(tr("Z (cm): "));
+    QHBoxLayout *layoutHeight   = new QHBoxLayout;
 
-    layoutZ->addWidget(zLabel);
-    layoutZ->addWidget(m_z);
+    layoutHeight->addWidget(heightLabel);
+    layoutHeight->addWidget(m_height);
 
                 m_insulationThickness        = new QLineEdit();
     QLabel      *insulationThicknessLabel    = new QLabel(tr("Insulation thickness (cm): "));
@@ -105,9 +105,9 @@ void TestBenchManagerWidget::addTestBenchDialog()
    
     QVBoxLayout *layoutDialog = new QVBoxLayout;
     layoutDialog->addLayout(layoutName);
-    layoutDialog->addLayout(layoutX);
-    layoutDialog->addLayout(layoutY);
-    layoutDialog->addLayout(layoutZ);
+    layoutDialog->addLayout(layoutLength);
+    layoutDialog->addLayout(layoutWidth);
+    layoutDialog->addLayout(layoutHeight);
     layoutDialog->addLayout(layoutInsulationThickness);
     layoutDialog->addLayout(layoutButtons);
 
@@ -120,9 +120,9 @@ void TestBenchManagerWidget::addTestBenchDialog()
 
     m_buttonDialogAdd->setEnabled(false);
     connect(m_name, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
-    connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
-    connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
-    connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_length, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_width, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
+    connect(m_height, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
     connect(m_insulationThickness, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogAdd()));
 
     dialogBox->exec();
@@ -130,7 +130,7 @@ void TestBenchManagerWidget::addTestBenchDialog()
 
 void TestBenchManagerWidget::enableButtonDialogAdd()
 {
-    if(m_name->text().isEmpty() || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty() || m_insulationThickness->text().isEmpty())
+    if(m_name->text().isEmpty() || m_length->text().isEmpty() || m_width->text().isEmpty() || m_height->text().isEmpty() || m_insulationThickness->text().isEmpty())
         m_buttonDialogAdd->setEnabled(false);
     else
         m_buttonDialogAdd->setEnabled(true);
@@ -145,26 +145,26 @@ void TestBenchManagerWidget::editTestBenchDialog()
     layoutNames->addWidget(namesLabel);
     layoutNames->addWidget(m_names);
 
-                m_x        = new QLineEdit();
-    QLabel      *xLabel    = new QLabel(tr("X (cm): "));
-    QHBoxLayout *layoutX   = new QHBoxLayout;
+                m_length        = new QLineEdit();
+    QLabel      *lengthLabel    = new QLabel(tr("X (cm): "));
+    QHBoxLayout *layoutLength   = new QHBoxLayout;
 
-    layoutX->addWidget(xLabel);
-    layoutX->addWidget(m_x);
+    layoutLength->addWidget(lengthLabel);
+    layoutLength->addWidget(m_length);
 
-                m_y        = new QLineEdit();
-    QLabel      *yLabel    = new QLabel(tr("Y (cm): "));
-    QHBoxLayout *layoutY   = new QHBoxLayout;
+                m_width        = new QLineEdit();
+    QLabel      *widthLabel    = new QLabel(tr("Y (cm): "));
+    QHBoxLayout *layoutWidth   = new QHBoxLayout;
 
-    layoutY->addWidget(yLabel);
-    layoutY->addWidget(m_y);
+    layoutWidth->addWidget(widthLabel);
+    layoutWidth->addWidget(m_width);
 
-                m_z        = new QLineEdit();
-    QLabel      *zLabel    = new QLabel(tr("Z (cm): "));
-    QHBoxLayout *layoutZ   = new QHBoxLayout;
+                m_height        = new QLineEdit();
+    QLabel      *heightLabel    = new QLabel(tr("Z (cm): "));
+    QHBoxLayout *layoutHeight   = new QHBoxLayout;
 
-    layoutZ->addWidget(zLabel);
-    layoutZ->addWidget(m_z);
+    layoutHeight->addWidget(heightLabel);
+    layoutHeight->addWidget(m_height);
 
                 m_insulationThickness        = new QLineEdit();
     QLabel      *insulationThicknessLabel    = new QLabel(tr("Insulation thickness (cm): "));
@@ -182,9 +182,9 @@ void TestBenchManagerWidget::editTestBenchDialog()
    
     QVBoxLayout *layoutDialog = new QVBoxLayout;
     layoutDialog->addLayout(layoutNames);
-    layoutDialog->addLayout(layoutX);
-    layoutDialog->addLayout(layoutY);
-    layoutDialog->addLayout(layoutZ);
+    layoutDialog->addLayout(layoutLength);
+    layoutDialog->addLayout(layoutWidth);
+    layoutDialog->addLayout(layoutHeight);
     layoutDialog->addLayout(layoutInsulationThickness);
     layoutDialog->addLayout(layoutButtons);
 
@@ -209,9 +209,9 @@ void TestBenchManagerWidget::editTestBenchDialog()
 
     m_buttonDialogEdit->setEnabled(false);
     connect(m_names, SIGNAL(currentIndexChanged(int)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_x, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_y, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
-    connect(m_z, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_length, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_width, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
+    connect(m_height, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
     connect(m_insulationThickness, SIGNAL(textChanged(QString)), this, SLOT(enableButtonDialogEdit()));
 
     connect(m_names, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateTestBench(QString)));
@@ -221,7 +221,7 @@ void TestBenchManagerWidget::editTestBenchDialog()
 
 void TestBenchManagerWidget::enableButtonDialogEdit()
 {
-    if(m_names->currentIndex() == 0 || m_x->text().isEmpty() || m_y->text().isEmpty() || m_z->text().isEmpty() || m_insulationThickness->text().isEmpty())
+    if(m_names->currentIndex() == 0 || m_length->text().isEmpty() || m_width->text().isEmpty() || m_height->text().isEmpty() || m_insulationThickness->text().isEmpty())
         m_buttonDialogEdit->setEnabled(false);
     else
         m_buttonDialogEdit->setEnabled(true);
@@ -235,9 +235,9 @@ void TestBenchManagerWidget::updateTestBench(QString testBenchName)
         while(query.next())
         {
             unsigned short index = 0;
-            m_x->setText(query.value(index++).toString());
-            m_y->setText(query.value(index++).toString());
-            m_z->setText(query.value(index++).toString());
+            m_length->setText(query.value(index++).toString());
+            m_width->setText(query.value(index++).toString());
+            m_height->setText(query.value(index++).toString());
             m_insulationThickness->setText(query.value(index++).toString());
         }
     }
@@ -310,7 +310,7 @@ void TestBenchManagerWidget::addTestBench()
             QMessageBox::critical(dialogBox, tr("Error"), tr("A test bench with this name is already existing."));
         else
         {
-            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, %5, %6)").arg("Test_benches").arg(m_name->text()).arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_insulationThickness->text().toInt())))
+            if(query.exec(QString("INSERT INTO %1 VALUES(NULL, \"%2\", %3, %4, %5, %6)").arg("Test_benches").arg(m_name->text()).arg(m_length->text().toInt()).arg(m_width->text().toInt()).arg(m_height->text().toInt()).arg(m_insulationThickness->text().toInt())))
             {
                 QMessageBox::information(this, tr("Result"), tr("Test bench succesfully added"));
                 emit closeDialog();
@@ -327,7 +327,7 @@ void TestBenchManagerWidget::editTestBench()
 {
     QSqlQuery query;
 
-    if(query.exec(QString("UPDATE %1 SET x=%2, y=%3, z=%4, insulation_thickness=%5 WHERE name=\"%6\"").arg("Test_benches").arg(m_x->text().toInt()).arg(m_y->text().toInt()).arg(m_z->text().toInt()).arg(m_insulationThickness->text().toInt()).arg(m_names->currentText())))
+    if(query.exec(QString("UPDATE %1 SET length=%2, width=%3, height=%4, insulation_thickness=%5 WHERE name=\"%6\"").arg("Test_benches").arg(m_length->text().toInt()).arg(m_width->text().toInt()).arg(m_height->text().toInt()).arg(m_insulationThickness->text().toInt()).arg(m_names->currentText())))
     {
         QMessageBox::information(this, tr("Result"), tr("Test bench succesfully edited"));
         emit closeDialog();

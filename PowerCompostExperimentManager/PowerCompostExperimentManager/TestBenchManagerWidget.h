@@ -45,9 +45,9 @@ private:
 
     QLineEdit   *m_name;
     QComboBox   *m_names;
-    QLineEdit   *m_x;
-    QLineEdit   *m_y;
-    QLineEdit   *m_z;
+    QLineEdit   *m_length;
+    QLineEdit   *m_width;
+    QLineEdit   *m_height;
     QLineEdit   *m_insulationThickness;
 
     QPushButton *m_buttonDialogAdd;
